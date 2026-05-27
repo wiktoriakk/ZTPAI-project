@@ -27,7 +27,7 @@ export class LoginComponent {
       next: () => this.router.navigate(['/products']),
       error: (err) => {
         this.error =
-          err.status === 401 ? 'Nieprawidłowy login lub hasło.' : 'Błąd logowania. Spróbuj ponownie.';
+          err.status === 401 ? 'Invalid username or password.' : 'Login failed. Please try again.';
         this.loading = false;
       },
     });
