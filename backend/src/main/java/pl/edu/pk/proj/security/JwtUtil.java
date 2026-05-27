@@ -1,6 +1,7 @@
 package pl.edu.pk.proj.security;
 
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -8,7 +9,8 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private String secret = "mojTajnyKlucz123";
+    @Value("${jwt.secret}")
+    private String secret;
 
     public String generateToken(String username, String role) {
         return Jwts.builder()
