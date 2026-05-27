@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pl.edu.pk.proj.model.Product;
 import pl.edu.pk.proj.repository.ProductRepository;
 import pl.edu.pk.proj.service.ProductService;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Optional;
 
@@ -21,6 +22,9 @@ class ProductServiceTest {
 
     @Mock
     private ProductRepository repository;
+
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
 
     @InjectMocks
     private ProductService productService;
