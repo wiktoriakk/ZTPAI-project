@@ -1,0 +1,17 @@
+<div class="container">
+  <h1>Product List</h1>
+
+  <div *ngIf="loading">Loading...</div>
+
+  <div *ngIf="error">{{ error }}</div>
+
+  <ul *ngIf="!loading && !error">
+    <li *ngFor="let product of products">
+      <h3>{{ product.name }}</h3>
+      <p>Price: {{ product.price | currency }}</p>
+      <p>{{ product.description }}</p>
+    </li>
+  </ul>
+
+  <p *ngIf="!loading && !error && products.length === 0">No products found.</p>
+</div>

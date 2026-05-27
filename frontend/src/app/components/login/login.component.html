@@ -1,0 +1,21 @@
+<div class="login-wrapper">
+  <div class="login-card">
+    <h2>Logowanie</h2>
+
+    <div *ngIf="error" class="error-msg">{{ error }}</div>
+
+    <div class="form-group">
+      <label for="username">Login</label>
+      <input id="username" type="text" [(ngModel)]="username" placeholder="admin" />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Hasło</label>
+      <input id="password" type="password" [(ngModel)]="password" placeholder="••••••••" />
+    </div>
+
+    <button (click)="onSubmit()" [disabled]="loading">
+      {{ loading ? 'Logowanie...' : 'Zaloguj się' }}
+    </button>
+  </div>
+</div>
