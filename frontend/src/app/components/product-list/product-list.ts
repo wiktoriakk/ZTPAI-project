@@ -70,6 +70,11 @@ export class ProductListComponent implements OnInit {
     });
   }
 
+  get avgPrice(): number {
+    if (!this.products.length) return 0;
+    return this.products.reduce((sum, p) => sum + p.price, 0) / this.products.length;
+  }
+
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);

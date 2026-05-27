@@ -1,54 +1,96 @@
 <div class="page">
+
+  <!-- Topbar -->
   <header class="topbar">
-    <h1>Products</h1>
+    <div class="topbar-logo">
+      <div class="dot"></div>
+      <span>ShopManager</span>
+    </div>
     <div class="topbar-right">
-      <span class="role-badge" [class.admin]="isAdmin">{{ isAdmin ? 'ADMIN' : 'USER' }}</span>
+      <span class="role-badge" [class.admin]="isAdmin">{{ isAdmin ? 'Admin' : 'User' }}</span>
       <button class="btn-logout" (click)="logout()">Log out</button>
     </div>
   </header>
 
   <main class="content">
 
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Products</div>
+        <div class="stat-value">{{ products.length }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg Price</div>
+        <div class="stat-value">
+          {{ products.length ? (avgPrice | currency:'USD':'symbol':'1.0-0') : '—' }}
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Access Level</div>
+        <div class="stat-value">{{ isAdmin ? 'Admin' : 'Read-only' }}</div>
+      </div>
+    </div>
+
+    <!-- Add Product (ADMIN only) -->
     <div *ngIf="isAdmin" class="card add-form">
-      <h2>Add Product</h2>
-      <div *ngIf="createError" class="msg error">{{ createError }}</div>
-      <div *ngIf="createSuccess" class="msg success">Product created successfully.</div>
+      <div class="card-header">
+        <div class="icon">＋</div>
+        <h2>Add New Product</h2>
+      </div>
+      <div *ngIf="createError" class="msg error"><span>⚠</span> {{ createError }}</div>
+      <div *ngIf="createSuccess" class="msg success"><span>✓</span> Product added successfully.</div>
       <div class="form-row">
-        <input [(ngModel)]="newProduct.name" placeholder="Name" />
-        <input [(ngModel)]="newProduct.price" type="number" min="0" placeholder="Price" />
+        <input [(ngModel)]="newProduct.name" placeholder="Product name" />
+        <input [(ngModel)]="newProduct.price" type="number" min="0" placeholder="Price ($)" />
         <input [(ngModel)]="newProduct.description" placeholder="Description (optional)" />
         <button class="btn-primary"
                 (click)="onCreateProduct()"
                 [disabled]="creating || !newProduct.name.trim() || newProduct.price < 0">
-          {{ creating ? 'Saving...' : 'Add' }}
+          {{ creating ? 'Saving...' : 'Add Product' }}
         </button>
       </div>
     </div>
 
+    <!-- Product Table -->
     <div class="card">
-      <div *ngIf="loading" class="state-msg">Loading...</div>
-      <div *ngIf="error" class="msg error">{{ error }}</div>
+      <div class="card-header">
+        <div class="icon">☰</div>
+        <h2>Product Catalog</h2>
+      </div>
 
-      <table *ngIf="!loading && !error && products.length > 0">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let p of products">
-            <td>{{ p.id }}</td>
-            <td>{{ p.name }}</td>
-            <td>{{ p.price | currency }}</td>
-            <td>{{ p.description || '—' }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div *ngIf="loading" class="state-msg">
+        <div class="loading-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
 
-      <p *ngIf="!loading && !error && products.length === 0" class="state-msg">No products found.</p>
+      <div *ngIf="error" class="msg error"><span>⚠</span> {{ error }}</div>
+
+      <div class="table-wrap" *ngIf="!loading && !error && products.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of products">
+              <td class="td-id">{{ p.id }}</td>
+              <td class="td-name">{{ p.name }}</td>
+              <td class="td-price">{{ p.price | currency }}</td>
+              <td class="td-desc">{{ p.description || '—' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p *ngIf="!loading && !error && products.length === 0" class="state-msg">
+        No products yet. {{ isAdmin ? 'Add one above!' : '' }}
+      </p>
     </div>
 
   </main>
