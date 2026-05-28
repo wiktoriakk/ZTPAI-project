@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -26,7 +26,8 @@ export class ProductListComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -41,10 +42,12 @@ export class ProductListComponent implements OnInit {
       next: (data) => {
         this.products = data;
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.error = err.status === 401 ? 'Unauthorized – please log in.' : 'Failed to load products.';
         this.loading = false;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -60,12 +63,17 @@ export class ProductListComponent implements OnInit {
         this.newProduct = { name: '', price: 0, description: '' };
         this.creating = false;
         this.createSuccess = true;
-        setTimeout(() => (this.createSuccess = false), 3000);
+        this.cdr.detectChanges();
+        setTimeout(() => {
+          this.createSuccess = false;
+          this.cdr.detectChanges();
+        }, 3000);
       },
       error: (err) => {
         this.createError =
           err.status === 403 ? 'Access denied – ADMIN role required.' : 'Failed to create product.';
         this.creating = false;
+        this.cdr.detectChanges();
       },
     });
   }
